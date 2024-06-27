@@ -5,6 +5,8 @@
  - [Project Overview](#project-overview)
  - [Dataset Documentation](#dataset-documentation)
  - [Model Selection and Training](#model-selection-and-training)
+ - [Application on Video Feeds](#application-on-video-feeds)
+ - []
 
 ## Project Overview
 
@@ -69,6 +71,25 @@ https://github.com/Infonioknight/video-feed-monitoring/assets/44343059/c34b4a07-
     - **F1 Score:** Maximum of **0.77** at a confidence threshold of **0.425**
     - **Mean Average Precision (mAP):** 0.791 at an IoU (Intersection over Union) threshold of 0.5 
 
+## Application on Video Feeds
 
+### Video Processing Pipeline
+- **Inputs:** The current version of the code works using the live video feed obtained from a webcam. 
+- **Preprocessing:** The video frames are extracted and resized to meet the model's required dimensions.
+- **Inference:** Each of these frames are then passed through the model for object detection and obtaining the bounding boxes.
 
+### Region of Interest Definition
+- **Inputs:** The Region of Interest implementation has two main parts to it.
+    - Marking the **boundary box** to be *visible on the interface when observing the video feeds*. This is used to **highlight the area** of the floor or region on the video-feed that is considered our region of interest.
+    - Marking the **actual** Region of Interest. This is a box that is surrounds the **visible** boundary box. This takes into account the height of a person dimensions of their bounding box to make our detection work.
+- **Implementation:** Each of the stages has a script which can be run and the points marked for the final prediction  and monitoring. The marked coordinates are stored and can be edited as required.
 
+### Prediction and Output
+- The boundary box is defined by marking the points on the video feed by the user.
+- The Region of Interest is then defined by marking points on the video feed based off the boundary box determined. This Region of Interest must **surround** the initial boundary box and take into account:
+    - Maximum height of the people that could appear in the given region
+    - Extentions of the person's bounding boxes when standing at all extremities of the boundary box.
+- When running the main program, the boundary box is in **GREEN** by default, siginifying that there are no threats at the moment.
+- The model then predicts on the each frame of the video feed. If a **'Person'** class object is within the **boundary box**, the colour of the box changes from **GREEN** to **RED** signalling **DANGER**.
+
+## Installation and Setup
