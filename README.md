@@ -3,16 +3,34 @@
 
 ## Table of Contents
  - [Project Overview](#project-overview)
+    - [Example Video](#example-video)
+    - [Key Components](#key-components)
  - [Dataset Documentation](#dataset-documentation)
+    - [Original Dataset Information](#original-dataset-information)
+    - [Dataset Modification](#dataset-modification)
+    - [Dataset Usage](#dataset-usage)
  - [Model Selection and Training](#model-selection-and-training)
+    - [Pretrained Model Selection](#pretained-model-selection)
+    - [Training Process](#training-process)
  - [Application on Video Feeds](#application-on-video-feeds)
- - []
+    - [Video Processing Pipeline](#video-processing-pipeline)
+    - [Region of Interest Definition](#region-of-interest-definition)
+    - [Prediction and Output](#prediction-and-output)
+ - [Installation and Setup](#installation-and-setup)
+    - [Setup Guide](#setup-guide)
+        - [Cloning Repository](#cloning-repository)
+        - [Installing Dependencies](#installing-dependencies)
+        - [Defining Boundary Box](#defining-boundary-box)
+        - [Defining Region of Interest](#definining-the-region-of-interest)
+        - [Main Prediction and Monitoring Script](#running-the-main-prediction-and-monitoring-script)
+- [Results](#results)
+
 
 ## Project Overview
 
 The core objective of the project will be to develop a system that is capable of real-time monitoring of designated areas using video feeds to ensure safety and security compliance.
 
-## Example Video
+### Example Video
 
 https://github.com/Infonioknight/video-feed-monitoring/assets/44343059/c34b4a07-aca9-44e5-903e-4047f16e7267
 
@@ -93,3 +111,53 @@ https://github.com/Infonioknight/video-feed-monitoring/assets/44343059/c34b4a07-
 - The model then predicts on the each frame of the video feed. If a **'Person'** class object is within the **boundary box**, the colour of the box changes from **GREEN** to **RED** signalling **DANGER**.
 
 ## Installation and Setup
+- Built using Python version 3.12.0. Follow the below setup guide and use the commands in the terminal window of the IDE.
+
+### Setup Guide
+
+#### Cloning Repository:
+- Clone the github repository using the below command.
+```
+    git clone https://github.com/Infonioknight/video-feed-monitoring.git
+```
+
+#### Installing dependencies:
+- Go into the Code_Data_Files folder and install the necessary dependencies:
+```
+    cd Code_Data_Files
+    pip3 install -r requirements.txt
+```
+
+#### Defining boundary box:
+- Start with setting up the boundary box on the video-feed currently monitored by the camera. Start with the following command:
+```
+    python3 box-coordinates.py
+```
+- After running the script, use the LEFT-MOUSE BUTTON to select 4 points for the boundary box IN CLOCKWISE ORDER - starting from the TOP LEFT.
+
+- After selecting the four points, the box is saved and the window automatically closes.
+
+#### Definining the Region of Interest:
+
+- Next, set up the region of interest around the boundary box with the following command:
+
+```
+    python3 roi.py
+```
+
+- Again, use the LEFT-MOUSE BUTTON to select 4 points for the Region of Interest IN CLOCKWISE ORDER - starting from the TOP LEFT.
+- Make sure this Region SURROUNDS the **boundary box** (which will be on the screen for reference) and takes into account the MAXIMUM HEIGHT of the **people** that can enter the **boundary region**. Going slightly larger than expected is alright, as it'll make sure any breach is detected.
+
+#### Running the main prediction and monitoring script:
+
+- Now that the base requirements are set-up, the main script can be run by the following
+```
+    python3 feed-monitoring.py
+```
+
+- This runs the main program and it continuously monitors the said video feed for potential breaches into the 'Region of Interest'.
+
+## Results
+- The system accurately predicts bounding boxes of objects falling into any of the dataset classes and accordingly checks if 'Person' classes enter the 'Region of Interest' and alert accordingly.
+
+- The model however struggles when the objects are too small or unclear, and clarity and good positioning of the video-feed source must be ensured during installation along with accurate determination of **boundary box** and **region of interest**.
